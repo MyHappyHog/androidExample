@@ -11,10 +11,9 @@ import butterknife.Bind;
 
 public class MainActivity extends AppCompatActivity {
 
-    private String[] numbers;
-
     @Bind(R.id.drawer_layout)
     DrawerLayout drawerLayout;
+    
     @Bind(R.id.left_drawer)
     ListView listView;
 
@@ -26,13 +25,12 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        numbers = getResources().getStringArray(R.array.number);
-        try {
-            listView.setAdapter(new ArrayAdapter<String>(this, R.layout.list_item, R.id.item, numbers));
-        }
-        catch (NullPointerException e) {
-            e.printStackTrace();
-        }
+        String[] numbers = { "1", "2", "3", "44" };
 
+        //ListView listView = (ListView)findViewById(R.id.left_drawer);
+        listView.setAdapter(new ArrayAdapter<String>(this, R.layout.list_item, R.id.item999, numbers));
+        
     }
+
+
 }
