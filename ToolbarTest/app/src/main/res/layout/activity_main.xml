@@ -21,13 +21,40 @@
         </android.support.v7.widget.Toolbar>
     </FrameLayout>
 
-    <ListView android:id="@+id/left_drawer"
+    <RelativeLayout
         android:layout_width="240dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:choiceMode="singleChoice"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="0dp"
-        android:background="#FFFFFF"/>
+        android:layout_height="wrap_content"
+        android:layout_gravity="start">
+
+        <TextView
+            android:id="@+id/iconsMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:background="#000000"
+            android:textSize="20dp"
+            android:text="android icons" />
+
+        <ListView
+            android:id="@+id/left_drawer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:choiceMode="singleChoice"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="20dp"
+            android:background="#000000"
+            android:layout_below="@id/iconsMenu"/>
+
+        <Button
+            android:id="@+id/addIconBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:text="ICON ADD!"
+            />
+
+    </RelativeLayout>
 
 </android.support.v4.widget.DrawerLayout>

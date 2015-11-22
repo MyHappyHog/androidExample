@@ -19,6 +19,7 @@ import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
     @Bind(R.id.toolbar)
     Toolbar toolbar;
 
+    private ArrayList<TestItem> arrayList = new ArrayList<>();
+    private TestAdapter testAdapter = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,14 +43,14 @@ public class MainActivity extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
 
-        final ArrayList<TestItem> arrayList = new ArrayList<>();
         arrayList.add(new TestItem(android.R.drawable.ic_dialog_alert, "ic_dialog_alert"));
         arrayList.add(new TestItem(android.R.drawable.ic_dialog_dialer, "ic_dialog_dialer"));
         arrayList.add(new TestItem(android.R.drawable.ic_dialog_email, "ic_dialog_email"));
         arrayList.add(new TestItem(android.R.drawable.ic_dialog_info, "ic_dialog_info"));
         arrayList.add(new TestItem(android.R.drawable.ic_dialog_map, "ic_dialog_map"));
 
-        listView.setAdapter(new TestAdapter(getApplicationContext(), R.layout.list_item, arrayList));
+        testAdapter = new TestAdapter(getApplicationContext(), R.layout.list_item, arrayList);
+        listView.setAdapter(testAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -56,6 +59,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+
+    private int cnt = 0;
+
+    @OnClick(R.id.addIconBtn)
+    public void OnClick(View view) {
+        arrayList.add(new TestItem(android.R.drawable.ic_input_add, "ic_input_add_" + (++cnt)));
+        testAdapter.notifyDataSetChanged();
+    }
+
 }
 
 class TestItem {
