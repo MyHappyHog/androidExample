@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnItemClick;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,6 +35,17 @@ public class MainActivity extends AppCompatActivity {
 
     private ArrayList<TestItem> arrayList = new ArrayList<>();
     private TestAdapter testAdapter = null;
+
+    @OnClick(R.id.addIconBtn)
+    public void addNavigationContents(View view) {
+        arrayList.add(new TestItem(android.R.drawable.ic_input_add, "ic_input_add_" + (arrayList.size() + 1)));
+        testAdapter.notifyDataSetChanged();
+    }
+
+    @OnItemClick(R.id.left_drawer)
+    public void clickAnimalItem(AdapterView<?> parent, View view, int position, long id) {
+        Toast.makeText(getApplicationContext(), arrayList.get(position).text, Toast.LENGTH_SHORT).show();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,24 +63,7 @@ public class MainActivity extends AppCompatActivity {
 
         testAdapter = new TestAdapter(getApplicationContext(), R.layout.list_item, arrayList);
         listView.setAdapter(testAdapter);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getApplicationContext(), arrayList.get(position).text, Toast.LENGTH_SHORT).show();
-            }
-        });
     }
-
-
-    private int cnt = 0;
-
-    @OnClick(R.id.addIconBtn)
-    public void OnClick(View view) {
-        arrayList.add(new TestItem(android.R.drawable.ic_input_add, "ic_input_add_" + (++cnt)));
-        testAdapter.notifyDataSetChanged();
-    }
-
 }
 
 class TestItem {
