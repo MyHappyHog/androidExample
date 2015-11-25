@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +13,6 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -33,18 +33,18 @@ public class MainActivity extends AppCompatActivity {
     @Bind(R.id.toolbar)
     Toolbar toolbar;
 
-    private ArrayList<TestItem> arrayList = new ArrayList<>();
+    private ArrayList<Animal> arrayList = new ArrayList<>();
     private TestAdapter testAdapter = null;
 
     @OnClick(R.id.addIconBtn)
     public void addNavigationContents(View view) {
-        arrayList.add(new TestItem(android.R.drawable.ic_input_add, "ic_input_add_" + (arrayList.size() + 1)));
+        arrayList.add(new Animal(android.R.drawable.ic_input_add));
         testAdapter.notifyDataSetChanged();
     }
 
     @OnItemClick(R.id.left_drawer)
     public void clickAnimalItem(AdapterView<?> parent, View view, int position, long id) {
-        Toast.makeText(getApplicationContext(), arrayList.get(position).text, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), arrayList.get(position).img, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -55,38 +55,37 @@ public class MainActivity extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
 
-        arrayList.add(new TestItem(android.R.drawable.ic_dialog_alert, "ic_dialog_alert"));
-        arrayList.add(new TestItem(android.R.drawable.ic_dialog_dialer, "ic_dialog_dialer"));
-        arrayList.add(new TestItem(android.R.drawable.ic_dialog_email, "ic_dialog_email"));
-        arrayList.add(new TestItem(android.R.drawable.ic_dialog_info, "ic_dialog_info"));
-        arrayList.add(new TestItem(android.R.drawable.ic_dialog_map, "ic_dialog_map"));
+        arrayList.add(new Animal(android.R.drawable.ic_dialog_alert));
+        arrayList.add(new Animal(android.R.drawable.ic_dialog_dialer));
+        arrayList.add(new Animal(android.R.drawable.ic_dialog_email));
+        arrayList.add(new Animal(android.R.drawable.ic_dialog_info));
+        arrayList.add(new Animal(android.R.drawable.ic_dialog_map));
+
 
         testAdapter = new TestAdapter(getApplicationContext(), R.layout.list_item, arrayList);
         listView.setAdapter(testAdapter);
     }
 }
 
-class TestItem {
+class Animal {
     int img;
-    String text;
 
-    public TestItem() {
+    public Animal() {
 
     }
 
-    public TestItem(int img, String text) {
+    public Animal(int img) {
         this.img = img;
-        this.text = text;
     }
 }
 
 class TestAdapter extends BaseAdapter {
     private Context context;
     private int layout;
-    private ArrayList<TestItem> arrayList;
+    private ArrayList<Animal> arrayList;
     private LayoutInflater layoutInflater;
 
-    public TestAdapter(Context context, int layout, ArrayList<TestItem> arrayList) {
+    public TestAdapter(Context context, int layout, ArrayList<Animal> arrayList) {
         this.context = context;
         this.layout = layout;
         this.arrayList = arrayList;
@@ -121,22 +120,47 @@ class TestAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-
-        viewHolder.imageView.setImageResource((arrayList.get(position)).img);
-        viewHolder.textView.setText((arrayList.get(position)).text);
+        viewHolder.animalView.setImageResource((arrayList.get(position)).img);
 
         return convertView;
     }
 
     static class ViewHolder {
-        @Bind(R.id.testIcon)
-        ImageView imageView;
+        /////////////////////////////////////////
 
-        @Bind(R.id.testText)
-        TextView textView;
+        @Bind(R.id.animalImage)
+        AnimalView animalView;
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
+    }
+}
+
+class AnimalView extends ImageView {
+
+    public AnimalView(Context context) {
+        super(context);
+    }
+
+    public AnimalView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
+
+    public AnimalView(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+
+        int width = Math.min(widthMeasureSpec, heightMeasureSpec);
+        setMeasuredDimension(width, width);
+    }
+
+    @Override
+    public void setImageResource(int resId) {
+        super.setImageResource(resId);
     }
 }
