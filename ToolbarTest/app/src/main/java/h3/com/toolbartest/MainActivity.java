@@ -1,11 +1,13 @@
 package h3.com.toolbartest;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -42,6 +44,32 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+    final int GET_PICTURE = 100;
+
+    @Bind(R.id.testGallery)
+    ImageView imageView;
+
+    @OnClick(R.id.btnGallery)
+    public void testGallery(View view) {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        startActivityForResult(intent, GET_PICTURE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            case GET_PICTURE:
+                if (resultCode == RESULT_OK) {
+                    imageView.setImageURI(data.getData());
+                }
+                break;
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

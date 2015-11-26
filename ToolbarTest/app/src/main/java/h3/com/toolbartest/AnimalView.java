@@ -25,8 +25,13 @@ class AnimalView extends ImageView {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
-        int width = Math.min(widthMeasureSpec, heightMeasureSpec);
-        setMeasuredDimension(width, width);
+        int min = Math.min(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.getSize(heightMeasureSpec));
+
+        if (min > 2048) {
+            min = 2048;
+        }
+
+        setMeasuredDimension(min, min);
     }
 
     @Override
