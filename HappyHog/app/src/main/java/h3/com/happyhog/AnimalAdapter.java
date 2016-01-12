@@ -21,13 +21,11 @@ import butterknife.ButterKnife;
 public class AnimalAdapter extends BaseAdapter {
     private Context context;
     private ArrayList<Animal> arrayList;
-    private ArrayList<String> values;
     private LayoutInflater layoutInflater;
 
-    public AnimalAdapter(Context context, ArrayList<Animal> arrayList, ArrayList<String> values) {
+    public AnimalAdapter(Context context, ArrayList<Animal> arrayList) {
         this.context = context;
         this.arrayList = arrayList;
-        this.values = values;
         this.layoutInflater = LayoutInflater.from(context);
     }
 
@@ -59,10 +57,12 @@ public class AnimalAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
+        // values setting
         viewHolder.animal.setImageResource((arrayList.get(position)).img);
-        viewHolder.text_temperature.setText(values.get(0));
-        viewHolder.text_humidity.setText(values.get(1));
+        viewHolder.text_temperature.setText((arrayList.get(position)).temperature);
+        viewHolder.text_humidity.setText((arrayList.get(position)).humidity);
 
+        // camera btn listener
         viewHolder.btnCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

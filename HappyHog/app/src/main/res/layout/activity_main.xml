@@ -58,12 +58,14 @@
                 android:background="#000">
 
                 <TextView
+                    android:id="@+id/main_animal_title"
                     android:layout_weight="1"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:text="TITLE"/>
 
                 <TextView
+                    android:id="@+id/main_animal_memo"
                     android:layout_weight="1"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
@@ -72,10 +74,11 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/main_state_text"
+                android:text="STATE INFORMATION"
                 android:layout_weight="10"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:text="STATE INFORMATION"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
                 android:background="#F00"/>
