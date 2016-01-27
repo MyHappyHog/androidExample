@@ -58,9 +58,9 @@ public class AnimalAdapter extends BaseAdapter {
         }
 
         // values setting
-        viewHolder.animal.setImageResource((arrayList.get(position)).img);
-        viewHolder.text_temperature.setText((arrayList.get(position)).temperature);
-        viewHolder.text_humidity.setText((arrayList.get(position)).humidity);
+        viewHolder.animal.setImageResource((arrayList.get(position)).getImg());
+        viewHolder.text_temperature.setText((arrayList.get(position)).getTemperature());
+        viewHolder.text_humidity.setText((arrayList.get(position)).getHumidity());
 
         // camera btn listener
         viewHolder.btnCamera.setOnClickListener(new View.OnClickListener() {

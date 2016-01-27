@@ -6,5 +6,5 @@ package h3.com.happyhog;
 public class Define {
     public static final int ACTIVITY_SETTING = 4;
 
-    public static final String ANIMAL_NAME = "animal name";
+    public static final String INTENT_ANIMAL = "animal";
 }

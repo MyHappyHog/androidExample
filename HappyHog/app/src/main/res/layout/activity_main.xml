@@ -104,13 +104,25 @@
         </LinearLayout>
 
         <!-- navigation drawer -->
-        <ListView
-            android:id="@+id/drawer"
+
+        <LinearLayout
             android:layout_width="290dp"
             android:layout_height="match_parent"
             android:layout_gravity="end"
-            android:background="#222">
-        </ListView>
+            android:orientation="vertical">
+            <ListView
+                android:id="@+id/drawer"
+                android:layout_width="290dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="#222">
+            </ListView>
+            <Button
+                android:id="@+id/drawer_add_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ADD"/>
+        </LinearLayout>
 
 
     </android.support.v4.widget.DrawerLayout>

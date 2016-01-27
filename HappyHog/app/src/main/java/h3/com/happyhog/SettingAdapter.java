@@ -96,65 +96,117 @@ public class SettingAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+        if (groupPosition < 0 && groupPosition > 4) {
+            return null;
+        }
 
         switch (groupPosition) {
             case 0:
-                if (convertView == null) {
-                    convertView = layoutInflater.inflate(R.layout.list_child_profile_layout, null);
-                }
-
-                ImageButton animalImg = (ImageButton) convertView.findViewById(R.id.list_child_profile_img);
-                final EditText editName = (EditText) convertView.findViewById(R.id.list_child_profile_name);
-                EditText editMemo = (EditText) convertView.findViewById(R.id.list_child_profile_memo);
-                EditText editDevice = (EditText) convertView.findViewById(R.id.list_child_profile_device);
-                Button saveBtn = (Button) convertView.findViewById(R.id.list_child_profile_save_btn);
-
-                animalImg.setImageResource(animal.img);
-                editName.setText(animal.name);
-                editMemo.setText(animal.memo);
-                editDevice.setText(animal.device);
-
-                editName.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable s) {
-                        if (!s.toString().trim().equals("")) {
-                            animal.name = s.toString().trim();
-                        }
-                    }
-                });
-
-                saveBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(context, "changed ? : " + animal.name, Toast.LENGTH_LONG).show();
-                        intent.putExtra(Define.ANIMAL_NAME, animal.name);
-                    }
-                });
-                return convertView;
-
+                convertView = changeProfile(convertView, parent); break;
             case 1:
+                convertView = changeSensorData(convertView, parent); break;
             case 2:
+                convertView = changeSensorConfiguration(convertView, parent); break;
             case 3:
-
-            default:
-
+                convertView = changeScheduler(convertView, parent); break;
         }
 
-        return null;
+        return convertView;
     }
 
     @Override
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return true;
+    }
+
+
+    private View changeProfile(View convertView, ViewGroup parent) {
+        if (convertView == null) {
+            convertView = layoutInflater.inflate(R.layout.list_child_profile_layout, null);
+        }
+
+        final String beforeName = animal.getName();
+
+        ImageButton animalImg = (ImageButton) convertView.findViewById(R.id.list_child_profile_img);
+        final EditText editName = (EditText) convertView.findViewById(R.id.list_child_profile_name);
+        EditText editMemo = (EditText) convertView.findViewById(R.id.list_child_profile_memo);
+        EditText editDevice = (EditText) convertView.findViewById(R.id.list_child_profile_device);
+        Button saveBtn = (Button) convertView.findViewById(R.id.list_child_profile_save_btn);
+
+        animalImg.setImageResource(animal.getImg());
+        editName.setText(animal.getName());
+        editMemo.setText(animal.getMemo());
+        editDevice.setText(animal.getDevice());
+
+        editName.addTextChangedListener(new AnimalTextWatcher(AnimalTextWatcher.NAME_CHANGE));
+        editMemo.addTextChangedListener(new AnimalTextWatcher(AnimalTextWatcher.MEMO_CHANGE));
+        editDevice.addTextChangedListener(new AnimalTextWatcher(AnimalTextWatcher.DEVICE_CHANGE));
+
+        saveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, "changed!", Toast.LENGTH_LONG).show();
+                AnimalDatabase.getInstance(context).removeAnimal(beforeName);
+                intent.putExtra(Define.INTENT_ANIMAL, animal);
+            }
+        });
+
+        return convertView;
+    }
+
+    private View changeSensorData(View convertView, ViewGroup parent) {
+
+        return convertView;
+    }
+
+    private View changeSensorConfiguration(View convertView, ViewGroup parent) {
+
+        return convertView;
+    }
+
+    private View changeScheduler(View convertView, ViewGroup parent) {
+
+        return convertView;
+    }
+
+
+    class AnimalTextWatcher implements TextWatcher {
+        public static final int NAME_CHANGE = 1;
+        public static final int MEMO_CHANGE = NAME_CHANGE + 1;
+        public static final int DEVICE_CHANGE = MEMO_CHANGE + 1;
+
+        private int flag;
+
+        AnimalTextWatcher(int flag) {
+            this.flag = flag;
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) { }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            if (!s.toString().trim().equals("")) {
+                switch (flag) {
+                    case NAME_CHANGE:
+                        animal.setName(s.toString().trim());
+                        break;
+
+                    case MEMO_CHANGE:
+                        animal.setMemo(s.toString().trim());
+                        break;
+
+                    case DEVICE_CHANGE:
+                        animal.setDevice(s.toString().trim());
+                        break;
+
+                    default:
+                        // throw exception : unexpected flag
+                }
+            }
+        }
     }
 }

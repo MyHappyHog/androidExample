@@ -19,8 +19,8 @@ public class SettingActivity extends Activity {
         ButterKnife.bind(this);
 
         Intent intent = getIntent();
-        Animal animal = new Animal(R.mipmap.ic_launcher);
-        animal.name = intent.getStringExtra(Define.ANIMAL_NAME);
+
+        Animal animal = (Animal) intent.getParcelableExtra(Define.INTENT_ANIMAL);
 
         ExpandableListView expandableListView = (ExpandableListView) findViewById(R.id.setting_layout);
         SettingAdapter settingAdapter = new SettingAdapter(this, animal, intent);
