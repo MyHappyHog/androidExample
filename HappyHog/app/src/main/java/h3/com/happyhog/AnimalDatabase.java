@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by ngh1 on 2016-01-23.
@@ -11,6 +13,8 @@ import java.util.ArrayList;
 
 // sqlite needed...
 public class AnimalDatabase {
+    private static final String ANIMAL_KEY = "_key";
+
     private static final String ANIMAL_IMG = "_img";
 
     private static final String ANIMAL_TEMPERATURE = "_temperature";
@@ -21,13 +25,15 @@ public class AnimalDatabase {
     private static final String ANIMAL_DEVICE = "_device";
 
     private static final String ANIMALS_NAME_LIST = "name_list";
-    private static final String ANIMALS_NAME_DELIM = "---";
+    private static final String ANIMALS_NAME_DELIM = "\\|";
 
     private SharedPreferences sharedPreferences = null;
     private SharedPreferences.Editor editor = null;
 
-
     private static AnimalDatabase instance;
+
+    private static ArrayList<Animal> animalsList;
+    private static ArrayList<String> animalsKeyList;
 
     public static AnimalDatabase getInstance(Context context) {
         if (instance == null) {
@@ -39,130 +45,114 @@ public class AnimalDatabase {
     private AnimalDatabase(Context context) {
         sharedPreferences = context.getSharedPreferences("HappyHog", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
+
+        animalsKeyList = new ArrayList<String>();
+        animalsList = new ArrayList<Animal>();
+
+        if (!isAnimalEmpty()) {
+            loadAnimalsKeyList();
+            loadAnimalsList();
+        }
+    }
+
+    private void loadAnimalsKeyList() {
+        String[] animals = parseAnimal(sharedPreferences.getString(ANIMALS_NAME_LIST, null));
+        // maybe occur classCastException...?
+
+        Collections.addAll(animalsKeyList, animals);
+    }
+
+    private void loadAnimalsList() {
+        for (String animalKey : animalsKeyList) {
+            animalsList.add(getAnimal(animalKey));
+        }
+    }
+
+    private Animal getAnimal(String animalKey) {
+        Animal animal = new Animal();
+
+        animal.setKey(
+                sharedPreferences.getString(animalKey, "KEY_LOAD_FAILED"));
+        animal.setImg(
+                sharedPreferences.getInt(animalKey + ANIMAL_IMG, animal.getImg()));
+        animal.setTemperature(
+                sharedPreferences.getString(animalKey + ANIMAL_TEMPERATURE, animal.getTemperature()));
+        animal.setHumidity(
+                sharedPreferences.getString(animalKey + ANIMAL_HUMIDITY, animal.getHumidity()));
+        animal.setName(
+                sharedPreferences.getString(animalKey + ANIMAL_NAME, animal.getName()));
+        animal.setMemo(
+                sharedPreferences.getString(animalKey + ANIMAL_MEMO, animal.getMemo()));
+        animal.setDevice(
+                sharedPreferences.getString(animalKey + ANIMAL_DEVICE, animal.getDevice()));
+
+        return animal;
+    }
+
+    private boolean setAnimal(Animal animal) {
+        String animalKey = animal.getKey();
+
+        editor.putInt(animalKey + ANIMAL_IMG, animal.getImg())
+                .putString(animalKey + ANIMAL_TEMPERATURE, animal.getTemperature())
+                .putString(animalKey + ANIMAL_HUMIDITY, animal.getHumidity())
+                .putString(animalKey + ANIMAL_NAME, animal.getName())
+                .putString(animalKey + ANIMAL_MEMO, animal.getMemo())
+                .putString(animalKey + ANIMAL_DEVICE, animal.getDevice())
+                .apply();
+
+        return true;
+    }
+
+    private String[] parseAnimal(String animals) {
+        String[] temp = animals.split(ANIMALS_NAME_DELIM);
+        List<String> separateAnimals = new ArrayList<String>();
+        Collections.addAll(separateAnimals, temp);
+        separateAnimals.remove("null");
+
+        return separateAnimals.toArray(new String[separateAnimals.size()]);
     }
 
     public boolean isAnimalEmpty() {
         return sharedPreferences.getString(ANIMALS_NAME_LIST, null) == null;
     }
 
-    public boolean containAnimal(String animalNameWanted) {
-        ArrayList<String> animalsNameList = getAnimalsNameList();
+    public boolean updateAnimal(Animal animal) {
+        boolean found = false;
 
-        if (animalsNameList == null) {
-            return false;
+        if (animalsList.contains(animal)) {
+            setAnimal(animal);
+
+            int it = animalsList.indexOf(animal);
+            animalsList.remove(it);
+            animalsList.add(it, getAnimal(animal.getKey()));
+
+            found = true;
         }
 
-        for (String animalName : animalsNameList) {
-            if (animalNameWanted.equals(animalName)) {
-                return true;
-            }
-        }
-
-        return false;
+        return found;
     }
 
-    // getter and setter : animal name
-    public ArrayList<String> getAnimalsNameList() {
-        String animalsName = sharedPreferences.getString(ANIMALS_NAME_LIST, null);
-
-        if (animalsName == null) {
-            return null;
-        }
-
-        String[] separateAnimalsName = animalsName.split(ANIMALS_NAME_DELIM);
-        ArrayList<String> animalsNameList = new ArrayList<String>();
-
-        for (String animalName : separateAnimalsName) {
-            animalsNameList.add(animalName);
-        }
-
-        if (animalsNameList.get(0).equals("null")) {
-            animalsNameList.remove(0);
-        }
-
-        return animalsNameList;
+    public void addAnimal(Animal animal) {
+        editor.putString(animal.getKey(), animal.getKey()).apply();
+        editor.putString(ANIMALS_NAME_LIST,
+                sharedPreferences.getString(ANIMALS_NAME_LIST, null)
+                        + "|" + animal.getKey()).apply();
+        setAnimal(animal);
+        animalsList.add(animal);
     }
 
-    public void setAnimalsNameList(ArrayList<String> animalsNameList) {
-        String animalsName = "";
-
-        for (String animalName : animalsNameList) {
-            animalsName += ANIMALS_NAME_DELIM + animalName;
-        }
-
-        editor.putString(ANIMALS_NAME_LIST, animalsName).apply();
-    }
-
-    public void setAnimalsName (String animalName) {
-        String animalsName = sharedPreferences.getString(ANIMALS_NAME_LIST, null);
-
-        animalsName += ANIMALS_NAME_DELIM + animalName;
-        editor.putString(ANIMALS_NAME_LIST, animalsName).apply();
-    }
-
-    // animal list : getter
     public ArrayList<Animal> getAnimalsList() {
-        ArrayList<String> animalNameList = getAnimalsNameList();
-        ArrayList<Animal> animals = new ArrayList<Animal>();
-
-        for (String animalName : animalNameList) {
-            animals.add(getAnimal(animalName));
-        }
-
-        return animals;
+        return animalsList;
     }
 
-    public boolean removeAnimal(String animalName) {
-        String animalsName = sharedPreferences.getString(ANIMALS_NAME_LIST, null);
-
-        if (animalsName == null || !containAnimal(animalName)) {
-            return false;
-        }
-
-        ArrayList<String> animalsNameList = getAnimalsNameList();
-        animalsNameList.remove(animalName);
-
-        setAnimalsNameList(animalsNameList);
-
-        return true;
-    }
-
-    // throw exception if getAnimal() == default Animal
-    public Animal getAnimal(String animalName) {
-        Animal animal = new Animal();
-
-        animal.setImg(
-                sharedPreferences.getInt(animalName + ANIMAL_IMG, animal.getImg()));
-        animal.setTemperature(
-                sharedPreferences.getString(animalName + ANIMAL_TEMPERATURE, animal.getTemperature()));
-        animal.setHumidity(
-                sharedPreferences.getString(animalName + ANIMAL_HUMIDITY, animal.getHumidity()));
-        animal.setName(
-                sharedPreferences.getString(animalName + ANIMAL_NAME, animal.getName()));
-        animal.setMemo(
-                sharedPreferences.getString(animalName + ANIMAL_MEMO, animal.getMemo()));
-        animal.setDevice(
-                sharedPreferences.getString(animalName + ANIMAL_DEVICE, animal.getDevice()));
-
-        return animal;
-    }
-
-    public void putAnimal(Animal animal) {
-        String animalName = animal.getName();
-
-        editor.putInt(animalName + ANIMAL_IMG, animal.getImg())
-                .putString(animalName + ANIMAL_TEMPERATURE, animal.getTemperature())
-                .putString(animalName + ANIMAL_HUMIDITY, animal.getHumidity())
-                .putString(animalName + ANIMAL_NAME, animal.getName())
-                .putString(animalName + ANIMAL_MEMO, animal.getMemo())
-                .putString(animalName + ANIMAL_DEVICE, animal.getDevice())
-                .apply();
-
-        setAnimalsName(animalName);
+    private ArrayList<String> getAnimalsKeyList() {
+        return animalsKeyList;
     }
 
     public void clear() {
         editor.clear().apply();
+        animalsList.clear();
+        animalsKeyList.clear();
     }
 
     @Override
@@ -170,3 +160,5 @@ public class AnimalDatabase {
         return sharedPreferences.getString(ANIMALS_NAME_LIST, "NOT EXIST");
     }
 }
+
+

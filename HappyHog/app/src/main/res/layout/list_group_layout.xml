@@ -8,6 +8,9 @@
         android:id="@+id/list_group_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#F0F"/>
+        android:textColor="#000"
+        android:textSize="25dp"
+        android:gravity="center"
+        android:background="@color/default_view_background"/>
 
 </LinearLayout>

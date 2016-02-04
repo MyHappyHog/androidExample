@@ -3,14 +3,14 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#00F">
+    android:background="@color/default_view_background">
 
     <ImageButton
         android:id="@+id/btnCamera"
         android:layout_weight="1"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:src="@android:drawable/ic_input_add"
+        android:src="@drawable/camera_icon"
         android:background="@android:color/transparent"/>
 
     <ImageButton
@@ -18,7 +18,7 @@
         android:layout_weight="1"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:src="@android:drawable/ic_input_delete"
+        android:src="@drawable/feed_icon"
         android:background="@android:color/transparent"/>
 
     <ImageButton
@@ -26,7 +26,7 @@
         android:layout_weight="1"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:src="@android:drawable/ic_delete"
+        android:src="@drawable/sns_icon"
         android:background="@android:color/transparent"/>
 
     <ImageButton
@@ -34,7 +34,7 @@
         android:layout_weight="1"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:src="@android:drawable/ic_input_get"
+        android:src="@drawable/setting_icon"
         android:background="@android:color/transparent"/>
 
 </LinearLayout>

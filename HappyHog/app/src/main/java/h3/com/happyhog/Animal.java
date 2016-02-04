@@ -3,6 +3,8 @@ package h3.com.happyhog;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.UUID;
+
 /**
  * animal class - it has animal information
  *
@@ -10,6 +12,8 @@ import android.os.Parcelable;
  * @author          ngh
  */
 public class Animal implements Parcelable {
+    private String key;
+
     private int img = R.drawable.default_animal_img;
 
     private String temperature = "-128";
@@ -19,8 +23,17 @@ public class Animal implements Parcelable {
     private String memo = "default memo";
     private String device = "default device";
 
+    public Animal() {
+        key = UUID.randomUUID().toString().replace("-", "");
+    }
+
     public String getState() {
         return "temperature : " + temperature + ", humidity : " + humidity;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return ((Animal)o).key.equals(this.key);
     }
 
     @Override
@@ -31,6 +44,7 @@ public class Animal implements Parcelable {
     // sending data method
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(key);
         dest.writeInt(img);
         dest.writeString(temperature);
         dest.writeString(humidity);
@@ -44,6 +58,7 @@ public class Animal implements Parcelable {
         @Override
         public Animal createFromParcel(Parcel source) {
             Animal animal = new Animal();
+            animal.setKey(source.readString());
             animal.setImg(source.readInt());
             animal.setTemperature(source.readString());
             animal.setHumidity(source.readString());
@@ -61,48 +76,56 @@ public class Animal implements Parcelable {
     };
 
     // Getter and Setter
-    public int getImg() {
-        return this.img;
+    public String getKey() {
+        return key;
     }
 
-    public void setImg(int img) {
-        this.img = img;
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public int getImg() {
+        return this.img;
     }
 
     public String getTemperature() {
         return this.temperature;
     }
 
-    public void setTemperature(String temperature) {
-        this.temperature = temperature;
-    }
-
     public String getHumidity() {
         return this.humidity;
-    }
-
-    public void setHumidity(String humidity) {
-        this.humidity = humidity;
     }
 
     public String getName() {
         return this.name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getMemo() {
         return this.memo;
     }
 
-    public void setMemo(String memo) {
-        this.memo = memo;
-    }
-
     public String getDevice() {
         return this.device;
+    }
+
+    public void setImg(int img) {
+        this.img = img;
+    }
+
+    public void setTemperature(String temperature) {
+        this.temperature = temperature;
+    }
+
+    public void setHumidity(String humidity) {
+        this.humidity = humidity;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setMemo(String memo) {
+        this.memo = memo;
     }
 
     public void setDevice(String device) {

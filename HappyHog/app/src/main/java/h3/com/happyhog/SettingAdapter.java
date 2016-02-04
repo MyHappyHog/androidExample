@@ -146,7 +146,6 @@ public class SettingAdapter extends BaseExpandableListAdapter {
             @Override
             public void onClick(View v) {
                 Toast.makeText(context, "changed!", Toast.LENGTH_LONG).show();
-                AnimalDatabase.getInstance(context).removeAnimal(beforeName);
                 intent.putExtra(Define.INTENT_ANIMAL, animal);
             }
         });

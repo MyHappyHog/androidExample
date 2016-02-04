@@ -3,7 +3,9 @@
     android:id="@+id/list_view_item_layout"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:descendantFocusability="blocksDescendants"
+    android:background="@color/default_background">
 
     <FrameLayout
         android:id="@+id/list_view_animal_layout"
@@ -28,6 +30,7 @@
             <TextView
                 android:id="@+id/text_temperature"
                 android:text="SAMPLE TEMPERATURE"
+                android:textColor="#000"
                 android:layout_toRightOf="@id/ic_temperature"
                 android:layout_alignTop="@id/ic_temperature"
                 android:layout_alignBottom="@id/ic_temperature"
@@ -42,6 +45,7 @@
             <TextView
                 android:id="@+id/text_humidity"
                 android:text="SAMPLE HUMIDITY"
+                android:textColor="#000"
                 android:layout_toRightOf="@id/ic_humidity"
                 android:layout_alignTop="@id/ic_humidity"
                 android:layout_alignBottom="@id/ic_humidity"
@@ -54,7 +58,7 @@
     <include
         android:id="@+id/list_view_bottom_button_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         layout="@layout/bottom_button_layout"/>
 
 </LinearLayout>

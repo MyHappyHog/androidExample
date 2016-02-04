@@ -5,13 +5,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
+import android.widget.LinearLayout;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
  * Created by ngh1 on 2016-01-12.
  */
 public class SettingActivity extends Activity {
+    @Bind(R.id.main_setting_layout)
+    LinearLayout mainSettingLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,7 +27,7 @@ public class SettingActivity extends Activity {
 
         Animal animal = (Animal) intent.getParcelableExtra(Define.INTENT_ANIMAL);
 
-        ExpandableListView expandableListView = (ExpandableListView) findViewById(R.id.setting_layout);
+        final ExpandableListView expandableListView = (ExpandableListView) findViewById(R.id.setting_layout);
         SettingAdapter settingAdapter = new SettingAdapter(this, animal, intent);
 
         expandableListView.setAdapter(settingAdapter);

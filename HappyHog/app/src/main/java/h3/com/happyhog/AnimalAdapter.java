@@ -8,7 +8,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -23,10 +22,19 @@ public class AnimalAdapter extends BaseAdapter {
     private ArrayList<Animal> arrayList;
     private LayoutInflater layoutInflater;
 
+    private View.OnClickListener onClickListener;
+
     public AnimalAdapter(Context context, ArrayList<Animal> arrayList) {
         this.context = context;
         this.arrayList = arrayList;
         this.layoutInflater = LayoutInflater.from(context);
+    }
+
+    public AnimalAdapter(Context context, ArrayList<Animal> arrayList, View.OnClickListener onClickListener) {
+        this.context = context;
+        this.arrayList = arrayList;
+        this.layoutInflater = LayoutInflater.from(context);
+        this.onClickListener = onClickListener;
     }
 
     @Override
@@ -50,7 +58,8 @@ public class AnimalAdapter extends BaseAdapter {
 
         if (convertView == null) {
             convertView = layoutInflater.inflate(R.layout.list_view_item_layout, null);
-            viewHolder = new ViewHolder(convertView);
+            viewHolder = new ViewHolder(convertView, position);
+            //viewHolder.btnSetting.setOnClickListener(onClickListener);
             convertView.setTag(viewHolder);
         }
         else {
@@ -59,10 +68,11 @@ public class AnimalAdapter extends BaseAdapter {
 
         // values setting
         viewHolder.animal.setImageResource((arrayList.get(position)).getImg());
-        viewHolder.text_temperature.setText((arrayList.get(position)).getTemperature());
-        viewHolder.text_humidity.setText((arrayList.get(position)).getHumidity());
+        viewHolder.text_temperature.setText((arrayList.get(position)).getName() + ", " + (arrayList.get(position)).getState()); // change !!!
+        viewHolder.text_humidity.setText((arrayList.get(position)).getKey()); // change !!!
 
         // camera btn listener
+        /*
         viewHolder.btnCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,15 +80,22 @@ public class AnimalAdapter extends BaseAdapter {
             }
         });
 
+         */
+
+
         return convertView;
     }
 
-    static class ViewHolder {
+    public static class ViewHolder {
+        int pos;
+
         @Bind(R.id.list_view_animal)
         ImageButton animal;
 
         @Bind(R.id.btnCamera)
         ImageButton btnCamera;
+
+        @Bind(R.id.btnSetting) ImageButton btnSetting;
 
         @Bind(R.id.ic_temperature)
         ImageView ic_temperature;
@@ -92,6 +109,7 @@ public class AnimalAdapter extends BaseAdapter {
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
+        public ViewHolder(View view, int pos) { ButterKnife.bind(this, view); this.pos = pos; }
 
     }
 }

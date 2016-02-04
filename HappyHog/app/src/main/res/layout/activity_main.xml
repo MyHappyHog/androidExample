@@ -3,30 +3,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/default_background"
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
+        android:background="@color/toolbar_background"
         android:minHeight="?attr/actionBarSize">
 
         <ImageButton
             android:id="@+id/btnHelp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="right"
             android:layout_marginRight="10dp"
-            android:src="@android:drawable/ic_dialog_alert"
+            android:src="@drawable/help_icon"
             android:background="@android:color/transparent"/>
 
         <ImageButton
             android:id="@+id/btnInfo"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="right"
             android:layout_marginRight="10dp"
-            android:src="@android:drawable/ic_dialog_info"
+            android:src="@drawable/info_icon"
             android:background="@android:color/transparent"/>
 
     </android.support.v7.widget.Toolbar>
@@ -42,36 +44,44 @@
             android:id="@+id/container_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
             android:orientation="vertical"
             android:gravity="center"
             android:weightSum="100"
-            android:background="#FFF">
+            android:background="@color/default_background">
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_weight="20"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:orientation="vertical"
                 android:layout_marginLeft="50dp"
                 android:layout_marginRight="50dp"
-                android:gravity="center"
-                android:background="#000">
+                android:padding="5dp">
 
                 <TextView
                     android:id="@+id/main_animal_title"
-                    android:layout_weight="1"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:gravity="center"
+                    android:background="@color/default_view_background"
+                    android:textSize="32dp"
+                    android:textColor="#000"
                     android:text="TITLE"/>
 
                 <TextView
                     android:id="@+id/main_animal_memo"
-                    android:layout_weight="1"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:gravity="center"
+                    android:background="@color/default_view_background"
+                    android:textSize="32dp"
+                    android:textColor="#000"
                     android:text="MEMO"/>
 
-            </LinearLayout>
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/main_state_text"
@@ -81,17 +91,21 @@
                 android:layout_height="0dp"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
-                android:background="#F00"/>
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
+                android:gravity="center"
+                android:textSize="20dp"
+                android:textColor="#000"
+                android:background="@color/default_view_background"/>
 
             <ImageView
                 android:id="@+id/ic_main_animal"
                 android:layout_weight="58"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:src="@mipmap/ic_launcher"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:background="#0F0"
+                android:background="@color/default_view_background"
                 />
 
             <include
@@ -99,12 +113,12 @@
                 android:layout_weight="12"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:layout_marginTop="10dp"
                 layout="@layout/bottom_button_layout"/>
 
         </LinearLayout>
 
         <!-- navigation drawer -->
-
         <LinearLayout
             android:layout_width="290dp"
             android:layout_height="match_parent"
@@ -115,6 +129,9 @@
                 android:layout_width="290dp"
                 android:layout_height="0dp"
                 android:layout_weight="1"
+                android:dividerHeight="4dp"
+                android:divider="#00000000"
+                android:choiceMode="singleChoice"
                 android:background="#222">
             </ListView>
             <Button

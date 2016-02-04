@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -92,6 +93,14 @@ public class MainActivity extends AppCompatActivity {
         // drawer setting
         animalAdapter = new AnimalAdapter(this, arrayList);
         listView.setAdapter(animalAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("------------fuck", "" + position);
+                Toast.makeText(getApplicationContext(), view.getTag().toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
 
         // main setting
         mainAnimalImage.setImageResource(mainAnimal.getImg());
@@ -106,15 +115,13 @@ public class MainActivity extends AppCompatActivity {
         animalDatabase = AnimalDatabase.getInstance(this);
 
         if (animalDatabase.isAnimalEmpty()) {
-            arrayList = new ArrayList<Animal>();
-            mainAnimal = new Animal();
-            arrayList.add(mainAnimal);
-            animalDatabase.putAnimal(mainAnimal);
-        }
-        else {
+            animalDatabase.addAnimal(new Animal());
+            animalDatabase.addAnimal(new Animal());
             arrayList = animalDatabase.getAnimalsList();
-            mainAnimal = arrayList.get(0);
         }
+
+        arrayList = animalDatabase.getAnimalsList();
+        mainAnimal = arrayList.get(0);
     }
 
     @Override
@@ -125,7 +132,10 @@ public class MainActivity extends AppCompatActivity {
             switch (requestCode) {
                 case Define.ACTIVITY_SETTING:
                     mainAnimal = (Animal) data.getParcelableExtra(Define.INTENT_ANIMAL);
-                    animalDatabase.putAnimal(mainAnimal);
+                    animalDatabase.updateAnimal(mainAnimal);
+                    arrayList = animalDatabase.getAnimalsList();
+                    animalAdapter.notifyDataSetChanged();
+
                     mainTitle.setText(mainAnimal.getName());
                     mainMemo.setText(mainAnimal.getMemo());
                     mainStateText.setText(mainAnimal.getState());
