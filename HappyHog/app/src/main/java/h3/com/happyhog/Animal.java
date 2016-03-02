@@ -5,6 +5,10 @@ import android.os.Parcelable;
 
 import java.util.UUID;
 
+import h3.com.happyhog.Dropbox.EnviromentSetting;
+import h3.com.happyhog.Dropbox.RelaySetting;
+import h3.com.happyhog.Dropbox.SensingInfo;
+
 /**
  * animal class - it has animal information
  *
@@ -16,8 +20,9 @@ public class Animal implements Parcelable {
 
     private int img = R.drawable.default_animal_img;
 
-    private String temperature = "-128";
-    private String humidity = "-128";
+    private SensingInfo sensingInfo = new SensingInfo();
+    private EnviromentSetting envSetting = new EnviromentSetting();
+    private RelaySetting relaySetting = new RelaySetting();
 
     private String name = "default name";
     private String memo = "default memo";
@@ -28,7 +33,7 @@ public class Animal implements Parcelable {
     }
 
     public String getState() {
-        return "temperature : " + temperature + ", humidity : " + humidity;
+        return "temperature : " + sensingInfo.getTemperature() + ", humidity : " + sensingInfo.getHumidity();
     }
 
     @Override
@@ -46,8 +51,8 @@ public class Animal implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(key);
         dest.writeInt(img);
-        dest.writeString(temperature);
-        dest.writeString(humidity);
+        dest.writeString("" + sensingInfo.getTemperature());
+        dest.writeString("" + sensingInfo.getHumidity());
         dest.writeString(name);
         dest.writeString(memo);
         dest.writeString(device);
@@ -89,11 +94,11 @@ public class Animal implements Parcelable {
     }
 
     public String getTemperature() {
-        return this.temperature;
+        return "" + sensingInfo.getTemperature();
     }
 
     public String getHumidity() {
-        return this.humidity;
+        return "" + sensingInfo.getHumidity();
     }
 
     public String getName() {
@@ -108,16 +113,20 @@ public class Animal implements Parcelable {
         return this.device;
     }
 
+    public SensingInfo getSensingInfo() {
+        return sensingInfo;
+    }
+
     public void setImg(int img) {
         this.img = img;
     }
 
     public void setTemperature(String temperature) {
-        this.temperature = temperature;
+        sensingInfo.setTemperature(Double.parseDouble(temperature));
     }
 
     public void setHumidity(String humidity) {
-        this.humidity = humidity;
+        sensingInfo.setHumidity(Double.parseDouble(humidity));
     }
 
     public void setName(String name) {
